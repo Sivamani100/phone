@@ -1,0 +1,118 @@
+﻿{
+  "packages": [
+    {
+      "package": "code_assets",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "1.0.0"
+      },
+      "upgradable": {
+        "version": "1.0.0"
+      },
+      "resolvable": {
+        "version": "1.0.0"
+      },
+      "latest": {
+        "version": "1.1.0"
+      }
+    },
+    {
+      "package": "google_fonts",
+      "kind": "direct",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "6.3.3"
+      },
+      "upgradable": {
+        "version": "6.3.3"
+      },
+      "resolvable": {
+        "version": "8.1.0"
+      },
+      "latest": {
+        "version": "8.1.0"
+      }
+    },
+    {
+      "package": "hooks",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "1.0.3"
+      },
+      "upgradable": {
+        "version": "1.0.3"
+      },
+      "resolvable": {
+        "version": "1.0.3"
+      },
+      "latest": {
+        "version": "2.0.0"
+      }
+    },
+    {
+      "package": "meta",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "1.18.0"
+      },
+      "upgradable": {
+        "version": "1.18.0"
+      },
+      "resolvable": {
+        "version": "1.18.0"
+      },
+      "latest": {
+        "version": "1.18.2"
+      }
+    },
+    {
+      "package": "native_toolchain_c",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "0.17.6"
+      },
+      "upgradable": {
+        "version": "0.17.6"
+      },
+      "resolvable": {
+        "version": "0.17.6"
+      },
+      "latest": {
+        "version": "0.19.0"
+      }
+    },
+    {
+      "package": "vector_math",
+      "kind": "transitive",
+      "isDiscontinued": false,
+      "isCurrentRetracted": false,
+      "isCurrentAffectedByAdvisory": false,
+      "current": {
+        "version": "2.2.0"
+      },
+      "upgradable": {
+        "version": "2.2.0"
+      },
+      "resolvable": {
+        "version": "2.2.0"
+      },
+      "latest": {
+        "version": "2.3.0"
+      }
+    }
+  ]
+}
