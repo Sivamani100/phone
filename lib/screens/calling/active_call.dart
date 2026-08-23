@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/dialer_provider.dart';
 import '../../utils/colors.dart';
+import '../../utils/glassmorphism.dart';
 
 class ActiveCall extends StatefulWidget {
   const ActiveCall({super.key});
@@ -53,32 +54,12 @@ class _ActiveCallState extends State<ActiveCall> with SingleTickerProviderStateM
           setState(() {
             _dtmfInput += digit;
           });
-          // Send real DTMF tone to the active call
           dialerProvider.playDtmfTone(digit);
         },
-        child: Container(
-          margin: const EdgeInsets.all(8),
-          height: 60,
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.08),
-            shape: BoxShape.circle,
-            border: Border.all(color: Colors.white.withOpacity(0.1)),
-          ),
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                digit,
-                style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
-              ),
-              if (sub.isNotEmpty)
-                Text(
-                  sub,
-                  style: TextStyle(color: Colors.white.withOpacity(0.4), fontSize: 8),
-                ),
-            ],
-          ),
+        child: GlassmorphicKeypadButton(
+          onTap: () {},
+          digit: digit,
+          letters: sub,
         ),
       ),
     );
@@ -91,45 +72,19 @@ class _ActiveCallState extends State<ActiveCall> with SingleTickerProviderStateM
     bool isActive,
     VoidCallback onTap,
   ) {
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: onTap,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 250),
-            padding: const EdgeInsets.all(18),
-            decoration: BoxDecoration(
-              color: isActive ? Colors.white : Colors.white.withOpacity(0.1),
-              shape: BoxShape.circle,
-              boxShadow: isActive
-                  ? [
-                      BoxShadow(
-                        color: Colors.white.withOpacity(0.3),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
-                      )
-                    ]
-                  : null,
-            ),
-            child: Icon(
-              icon,
-              color: icon == Icons.fiber_manual_record_rounded && isActive
-                  ? Colors.red
-                  : (isActive ? const Color(0xFF0F0F13) : Colors.white),
-              size: 26,
-            ),
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          label,
-          style: TextStyle(
-            color: Colors.white.withOpacity(0.8),
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
+    return GlassmorphicButton(
+      onTap: onTap,
+      icon: icon,
+      label: label,
+      isActive: isActive,
+      size: 70,
+      activeColor: const Color(0xFFFFFFFF),
+      inactiveColor: Colors.white.withOpacity(0.15),
+      iconColor: isActive
+          ? (icon == Icons.fiber_manual_record_rounded
+              ? AppColors.hangupRed
+              : Colors.black)
+          : Colors.white,
     );
   }
 
@@ -196,21 +151,33 @@ class _ActiveCallState extends State<ActiveCall> with SingleTickerProviderStateM
                   const SizedBox(height: 32),
                   
                   // Selected SIM Indicator
-                  Container(
+                  GlassmorphicContainer(
+                    blurStrength: 12,
+                    opacity: 0.08,
+                    backgroundColor: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.08),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.white.withOpacity(0.1)),
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.15),
+                      width: 1.2,
                     ),
+                    margin: EdgeInsets.zero,
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.sim_card_rounded, color: Colors.white, size: 14),
+                        Icon(
+                          Icons.sim_card_rounded,
+                          color: Colors.white.withOpacity(0.7),
+                          size: 14,
+                        ),
                         const SizedBox(width: 6),
                         Text(
                           dialerProvider.simSelected,
-                          style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.85),
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ],
                     ),
@@ -306,13 +273,16 @@ class _ActiveCallState extends State<ActiveCall> with SingleTickerProviderStateM
                   else
                     // DTMF Keypad Panel
                     Expanded(
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 20),
+                      child: GlassmorphicContainer(
+                        blurStrength: 15,
+                        opacity: 0.12,
+                        backgroundColor: Colors.white,
+                        borderRadius: BorderRadius.circular(28),
                         padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.4),
-                          borderRadius: BorderRadius.circular(28),
-                          border: Border.all(color: Colors.white.withOpacity(0.1)),
+                        margin: const EdgeInsets.symmetric(vertical: 20),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.2),
+                          width: 1.5,
                         ),
                         child: Column(
                           children: [
@@ -321,7 +291,12 @@ class _ActiveCallState extends State<ActiveCall> with SingleTickerProviderStateM
                               alignment: Alignment.centerRight,
                               child: Text(
                                 _dtmfInput,
-                                style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold, letterSpacing: 2),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 2,
+                                ),
                               ),
                             ),
                             const Spacer(),
@@ -356,7 +331,13 @@ class _ActiveCallState extends State<ActiveCall> with SingleTickerProviderStateM
                             const Spacer(),
                             TextButton(
                               onPressed: () => setState(() => _showKeypad = false),
-                              child: const Text('Hide Keypad', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                              child: const Text(
+                                'Hide Keypad',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -488,30 +469,33 @@ class _ActiveCallState extends State<ActiveCall> with SingleTickerProviderStateM
                             children: [
                               GestureDetector(
                                 onTap: () => dialerProvider.endCall(),
-                                child: Container(
-                                  width: 76,
-                                  height: 76,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.hangupRed,
-                                    shape: BoxShape.circle,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: AppColors.hangupRed.withOpacity(0.55),
-                                        blurRadius: 22,
-                                        offset: const Offset(0, 6),
-                                      )
-                                    ],
+                                child: GlassmorphicContainer(
+                                  blurStrength: 20,
+                                  opacity: 0.95,
+                                  backgroundColor: AppColors.hangupRed,
+                                  borderRadius: BorderRadius.circular(90),
+                                  padding: const EdgeInsets.all(22),
+                                  border: Border.all(
+                                    color: AppColors.hangupRed.withOpacity(0.6),
+                                    width: 2,
                                   ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: AppColors.hangupRed.withOpacity(0.5),
+                                      blurRadius: 28,
+                                      offset: const Offset(0, 12),
+                                    ),
+                                  ],
                                   child: const Icon(
                                     Icons.call_end_rounded,
                                     color: Colors.white,
-                                    size: 34,
+                                    size: 32,
                                   ),
                                 ),
                               ),
                               const SizedBox(height: 10),
                               Text(
-                                'Decline',
+                                'Reject',
                                 style: TextStyle(
                                   color: Colors.white.withOpacity(0.75),
                                   fontSize: 13,
@@ -520,29 +504,32 @@ class _ActiveCallState extends State<ActiveCall> with SingleTickerProviderStateM
                               ),
                             ],
                           ),
-                          // ANSWER button
+                          // ACCEPT button
                           Column(
                             children: [
                               GestureDetector(
                                 onTap: () => dialerProvider.answerCall(),
-                                child: Container(
-                                  width: 76,
-                                  height: 76,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.callGreen,
-                                    shape: BoxShape.circle,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: AppColors.callGreen.withOpacity(0.55),
-                                        blurRadius: 22,
-                                        offset: const Offset(0, 6),
-                                      )
-                                    ],
+                                child: GlassmorphicContainer(
+                                  blurStrength: 20,
+                                  opacity: 0.95,
+                                  backgroundColor: AppColors.callGreen,
+                                  borderRadius: BorderRadius.circular(90),
+                                  padding: const EdgeInsets.all(22),
+                                  border: Border.all(
+                                    color: AppColors.callGreen.withOpacity(0.6),
+                                    width: 2,
                                   ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: AppColors.callGreen.withOpacity(0.5),
+                                      blurRadius: 28,
+                                      offset: const Offset(0, 12),
+                                    ),
+                                  ],
                                   child: const Icon(
                                     Icons.call_rounded,
                                     color: Colors.white,
-                                    size: 34,
+                                    size: 32,
                                   ),
                                 ),
                               ),
@@ -566,21 +553,24 @@ class _ActiveCallState extends State<ActiveCall> with SingleTickerProviderStateM
                       children: [
                         GestureDetector(
                           onTap: () => dialerProvider.endCall(),
-                          child: Container(
-                            width: 80,
-                            height: 80,
-                            decoration: BoxDecoration(
-                              color: AppColors.hangupRed,
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColors.hangupRed.withOpacity(0.55),
-                                  blurRadius: 22,
-                                  spreadRadius: 2,
-                                  offset: const Offset(0, 6),
-                                )
-                              ],
+                          child: GlassmorphicContainer(
+                            blurStrength: 20,
+                            opacity: 0.95,
+                            backgroundColor: AppColors.hangupRed,
+                            borderRadius: BorderRadius.circular(90),
+                            padding: const EdgeInsets.all(24),
+                            border: Border.all(
+                              color: AppColors.hangupRed.withOpacity(0.6),
+                              width: 2,
                             ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.hangupRed.withOpacity(0.5),
+                                blurRadius: 28,
+                                spreadRadius: 2,
+                                offset: const Offset(0, 12),
+                              ),
+                            ],
                             child: const Icon(
                               Icons.call_end_rounded,
                               color: Colors.white,
@@ -588,7 +578,7 @@ class _ActiveCallState extends State<ActiveCall> with SingleTickerProviderStateM
                             ),
                           ),
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 12),
                         Text(
                           'End Call',
                           style: TextStyle(
